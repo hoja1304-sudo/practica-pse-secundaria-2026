@@ -148,18 +148,22 @@ function miniCircP(cx,cy,r,labelC,xLab){
   // P en origen
   g += `<circle cx="${sx(0)}" cy="${sy(0)}" r="3" fill="#111"/>`;
   g += `<text x="${sx(0)-3}" y="${sy(0)+13}" text-anchor="end" font-size="10">P</text>`;
-  // Guías
-  g += `<line x1="${sx(cx)}" y1="${sy(0)}" x2="${sx(cx)}" y2="${sy(cy)}" stroke="#777" stroke-dasharray="4 3" stroke-width="1.1"/>`;
+  // Guías al centro y al punto superior (cx, cy+r)
+  g += `<line x1="${sx(cx)}" y1="${sy(0)}" x2="${sx(cx)}" y2="${sy(cy+r)}" stroke="#777" stroke-dasharray="4 3" stroke-width="1.1"/>`;
   g += `<line x1="${sx(0)}" y1="${sy(cy)}" x2="${sx(cx)}" y2="${sy(cy)}" stroke="#777" stroke-dasharray="4 3" stroke-width="1.1"/>`;
-  // Círculo (radio en píxeles calculado desde la escala x, que es uniforme)
+  g += `<line x1="${sx(0)}" y1="${sy(cy+r)}" x2="${sx(cx)}" y2="${sy(cy+r)}" stroke="#777" stroke-dasharray="4 3" stroke-width="1.1"/>`;
+  // Círculo
   const rx = Math.abs(sx(cx+r)-sx(cx));
   g += `<circle cx="${sx(cx)}" cy="${sy(cy)}" r="${rx}" fill="none" stroke="#111" stroke-width="1.8"/>`;
   g += `<circle cx="${sx(cx)}" cy="${sy(cy)}" r="3" fill="#111"/>`;
-  // Etiqueta centro (encima del punto)
-  g += `<text x="${sx(cx)}" y="${sy(cy)-4}" text-anchor="middle" font-size="10" font-weight="bold" font-style="italic">${labelC}</text>`;
+  // Punto superior de la circunferencia
+  g += `<circle cx="${sx(cx)}" cy="${sy(cy+r)}" r="2.5" fill="#111"/>`;
+  // Etiqueta centro
+  g += `<text x="${sx(cx)}" y="${sy(cy)-4}" text-anchor="middle" font-size="10" font-weight="bold">${labelC}</text>`;
   // Etiquetas numéricas en ejes
   g += `<text x="${sx(cx)}" y="${sy(0)+13}" text-anchor="middle" font-size="10">${xLab}</text>`;
   g += `<text x="${sx(0)-3}" y="${sy(cy)+4}" text-anchor="end" font-size="10">${cy}</text>`;
+  g += `<text x="${sx(0)-3}" y="${sy(cy+r)+4}" text-anchor="end" font-size="10">${cy+r}</text>`;
   return mkSvg(W,H,g,'mini grafico circunferencia');
 }
 
@@ -174,16 +178,20 @@ function miniCircNP(cx,cy,r,labelC,xLab){
   let g = gg;
   g += `<text x="${sx(xMax)-2}" y="${sy(0)+13}" text-anchor="end" font-size="10">x</text>`;
   g += `<text x="${sx(0)+4}" y="${sy(yMax)+11}" font-size="10">y</text>`;
-  // Guías
-  g += `<line x1="${sx(cx)}" y1="${sy(0)}" x2="${sx(cx)}" y2="${sy(cy)}" stroke="#777" stroke-dasharray="4 3" stroke-width="1.1"/>`;
+  // Guías al centro y al punto superior (cx, cy+r)
+  g += `<line x1="${sx(cx)}" y1="${sy(0)}" x2="${sx(cx)}" y2="${sy(cy+r)}" stroke="#777" stroke-dasharray="4 3" stroke-width="1.1"/>`;
   g += `<line x1="${sx(0)}" y1="${sy(cy)}" x2="${sx(cx)}" y2="${sy(cy)}" stroke="#777" stroke-dasharray="4 3" stroke-width="1.1"/>`;
+  g += `<line x1="${sx(0)}" y1="${sy(cy+r)}" x2="${sx(cx)}" y2="${sy(cy+r)}" stroke="#777" stroke-dasharray="4 3" stroke-width="1.1"/>`;
   // Círculo
   const rx = Math.abs(sx(cx+r)-sx(cx));
   g += `<circle cx="${sx(cx)}" cy="${sy(cy)}" r="${rx}" fill="none" stroke="#111" stroke-width="1.8"/>`;
   g += `<circle cx="${sx(cx)}" cy="${sy(cy)}" r="3" fill="#111"/>`;
-  g += `<text x="${sx(cx)+4}" y="${sy(cy)-4}" font-size="10" font-weight="bold" font-style="italic">${labelC}</text>`;
+  // Punto superior de la circunferencia
+  g += `<circle cx="${sx(cx)}" cy="${sy(cy+r)}" r="2.5" fill="#111"/>`;
+  g += `<text x="${sx(cx)+4}" y="${sy(cy)-4}" font-size="10" font-weight="bold">${labelC}</text>`;
   g += `<text x="${sx(cx)}" y="${sy(0)+13}" text-anchor="middle" font-size="10">${xLab}</text>`;
   g += `<text x="${sx(0)-3}" y="${sy(cy)+4}" text-anchor="end" font-size="10">${cy}</text>`;
+  g += `<text x="${sx(0)-3}" y="${sy(cy+r)+4}" text-anchor="end" font-size="10">${cy+r}</text>`;
   return mkSvg(W,H,g,'mini grafico posicion');
 }
 
