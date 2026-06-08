@@ -137,8 +137,10 @@ function mkPlane(cfg){
 // Usa SIEMPRE el mismo sistema de coordenadas fijo: x[-30,36] y[-12,31]
 // (igual que \grafcirc en LaTeX, scale=0.078, bounding box (-32,-15)–(43,34))
 function miniCircP(cx,cy,r,labelC,xLab){
-  const W=220,H=190,pad=24;
+  const W=220,pad=24;
   const xMin=-30,xMax=36,yMin=-12,yMax=31;
+  // H calculado para escala uniforme: mismos px/unidad en x e y
+  const H = Math.round((yMax-yMin)*(W-2*pad)/(xMax-xMin)) + 2*pad;
   const p = mkPlane({W,H,pad,xMin,xMax,yMin,yMax});
   const {g:gg,sx,sy,id} = p;
   let g = gg;
@@ -171,8 +173,10 @@ function miniCircP(cx,cy,r,labelC,xLab){
 // Usa SIEMPRE el mismo sistema de coordenadas fijo: x[-1,10] y[-1,10]
 // (igual que \grafpos en LaTeX, scale=0.35, bounding box (-2,-1)–(11,11))
 function miniCircNP(cx,cy,r,labelC,xLab){
-  const W=200,H=185,pad=26;
+  const W=200,pad=26;
   const xMin=-1,xMax=10,yMin=-1,yMax=10;
+  // H calculado para escala uniforme (xRange=yRange=11, por lo que H≈W)
+  const H = Math.round((yMax-yMin)*(W-2*pad)/(xMax-xMin)) + 2*pad;
   const p = mkPlane({W,H,pad,xMin,xMax,yMin,yMax});
   const {g:gg,sx,sy} = p;
   let g = gg;
