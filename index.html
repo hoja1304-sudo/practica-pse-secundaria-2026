@@ -136,9 +136,11 @@ function mkPlane(cfg){
 // Mini gráfico con P en origen y círculo centrado en (cx,cy) radio r
 // Usa SIEMPRE el mismo sistema de coordenadas fijo: x[-30,36] y[-12,31]
 // (igual que \grafcirc en LaTeX, scale=0.078, bounding box (-32,-15)–(43,34))
-function miniCircP(cx,cy,r,labelC,xLab){
+function miniCircP(cx,cy,r,labelC,xLab,xMinOvr,xMaxOvr){
   const W=220,pad=24;
-  const xMin=-30,xMax=36,yMin=-12,yMax=31;
+  const xMin = xMinOvr!==undefined ? xMinOvr : -30;
+  const xMax = xMaxOvr!==undefined ? xMaxOvr : 36;
+  const yMin=-12,yMax=31;
   // H calculado para escala uniforme: mismos px/unidad en x e y
   const H = Math.round((yMax-yMin)*(W-2*pad)/(xMax-xMin)) + 2*pad;
   const p = mkPlane({W,H,pad,xMin,xMax,yMin,yMax});
@@ -160,8 +162,8 @@ function miniCircP(cx,cy,r,labelC,xLab){
   g += `<circle cx="${sx(cx)}" cy="${sy(cy)}" r="4.5" fill="#111"/>`;
   // Punto superior de la circunferencia
   g += `<circle cx="${sx(cx)}" cy="${sy(cy+r)}" r="3.5" fill="#111"/>`;
-  // Etiqueta centro
-  g += `<text x="${sx(cx)}" y="${sy(cy)-5}" text-anchor="middle" font-size="9" font-weight="bold">${labelC}</text>`;
+  // Etiqueta centro (offset a la derecha de la línea punteada vertical)
+  g += `<text x="${sx(cx)+3}" y="${sy(cy)-5}" text-anchor="start" font-size="9" font-weight="bold">${labelC}</text>`;
   // Etiquetas numéricas en ejes
   g += `<text x="${sx(cx)}" y="${sy(0)+13}" text-anchor="middle" font-size="9">${xLab}</text>`;
   g += `<text x="${sx(0)-4}" y="${sy(cy)+4}" text-anchor="end" font-size="9">${cy}</text>`;
@@ -192,7 +194,7 @@ function miniCircNP(cx,cy,r,labelC,xLab){
   g += `<circle cx="${sx(cx)}" cy="${sy(cy)}" r="4.5" fill="#111"/>`;
   // Punto superior de la circunferencia
   g += `<circle cx="${sx(cx)}" cy="${sy(cy+r)}" r="3.5" fill="#111"/>`;
-  g += `<text x="${sx(cx)+5}" y="${sy(cy)-5}" font-size="9" font-weight="bold">${labelC}</text>`;
+  g += `<text x="${sx(cx)+3}" y="${sy(cy)-5}" text-anchor="start" font-size="9" font-weight="bold">${labelC}</text>`;
   g += `<text x="${sx(cx)}" y="${sy(0)+13}" text-anchor="middle" font-size="9">${xLab}</text>`;
   g += `<text x="${sx(0)-4}" y="${sy(cy)+4}" text-anchor="end" font-size="9">${cy}</text>`;
   g += `<text x="${sx(0)-4}" y="${sy(cy+r)+4}" text-anchor="end" font-size="9">${cy+r}</text>`;
@@ -387,7 +389,7 @@ const ITEMS = [
       {cx:20,cy:12,r:8,l:'D',xl:20,label:'A'},
       {cx:12,cy:20,r:8,l:'D',xl:12,label:'B'},
       {cx:20,cy:12,r:4,l:'D',xl:20,label:'C'},
-      {cx:-20,cy:12,r:8,l:'D',xl:-20,label:'D'}
+      {cx:-20,cy:12,r:8,l:'D',xl:-20,label:'D',xMaxOvr:5}
     ],
     k:'A',
     e:'El dron D está en (20,12). El radio es 8. Solo la opción A tiene el centro correcto y el radio correcto.'
@@ -552,7 +554,7 @@ function show(i){
     const useMiniP = it.n===1; // ítem 1 usa P en origen
     optsHtml = `<div class="mini-grid">${it.graphOpts.map(o=>{
       const svg = useMiniP
-        ? miniCircP(o.cx,o.cy,o.r,o.l,o.xl)
+        ? miniCircP(o.cx,o.cy,o.r,o.l,o.xl,o.xMinOvr,o.xMaxOvr)
         : miniCircNP(o.cx,o.cy,o.r,o.l,o.xl);
       const sel = res[i]===o.label ? 'style="outline:2.5px solid #1565c0;border-radius:6px;"' : '';
       return `<div class="mini-cell" ${sel} id="gcell-${o.label}" onclick="chooseGraph('${o.label}')" style="cursor:pointer;padding:6px;border-radius:6px;border:1.5px solid #d0d7e4;">
