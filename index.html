@@ -175,10 +175,9 @@ function miniCircP(cx,cy,r,labelC,xLab,xMinOvr,xMaxOvr,yMinOvr,yMaxOvr){
 // Mini gráfico SIN punto P: nueva posición tras traslación
 // Usa SIEMPRE el mismo sistema de coordenadas fijo: x[-1,10] y[-1,10]
 // (igual que \grafpos en LaTeX, scale=0.35, bounding box (-2,-1)–(11,11))
-function miniCircNP(cx,cy,r,labelC,xLab){
+function miniCircNP(cx,cy,r,labelC,xLab,yMaxOvr){
   const W=200,pad=26;
-  const xMin=-1,xMax=10,yMin=-1,yMax=11;
-  // H calculado para escala uniforme. yMax=11 da espacio para cy+r=10 (item5 opcB)
+  const xMin=-1,xMax=10,yMin=-1,yMax=yMaxOvr!==undefined ? yMaxOvr : 11;
   const H = Math.round((yMax-yMin)*(W-2*pad)/(xMax-xMin)) + 2*pad;
   const p = mkPlane({W,H,pad,xMin,xMax,yMin,yMax});
   const {g:gg,sx,sy} = p;
@@ -444,7 +443,7 @@ const ITEMS = [
        máximo de la señal emitida por la antena en la nueva ubicación?</p>`,
     graphOpts: [
       {cx:7,cy:5,r:2,l:'K',xl:7,label:'A'},
-      {cx:4,cy:8,r:2,l:'K',xl:4,label:'B'},
+      {cx:4,cy:8,r:2,l:'K',xl:4,label:'B',yMaxOvr:13},
       {cx:1,cy:5,r:2,l:'K',xl:1,label:'C'},
       {cx:7,cy:2,r:2,l:'K',xl:7,label:'D'}
     ],
@@ -534,7 +533,7 @@ function show(i){
     optsHtml = `<div class="mini-grid">${it.graphOpts.map(o=>{
       const svg = useMiniP
         ? miniCircP(o.cx,o.cy,o.r,o.l,o.xl,o.xMinOvr,o.xMaxOvr,o.yMinOvr,o.yMaxOvr)
-        : miniCircNP(o.cx,o.cy,o.r,o.l,o.xl);
+        : miniCircNP(o.cx,o.cy,o.r,o.l,o.xl,o.yMaxOvr);
       const sel = res[i]===o.label ? 'style="outline:2.5px solid #1565c0;border-radius:6px;"' : '';
       return `<div class="mini-cell" ${sel} id="gcell-${o.label}" onclick="chooseGraph('${o.label}')" style="cursor:pointer;padding:6px;border-radius:6px;border:1.5px solid #d0d7e4;">
         <span class="opt-letter">${o.label})</span>${svg}</div>`;
